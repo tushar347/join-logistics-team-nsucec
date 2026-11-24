@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mohammad Tushar Abdullah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ────────────────────────────────────── */
+:root{
+  --ink:       #07090e;
+  --surface:   #0c1018;
+  --panel:     #111720;
+  --card:      #151d29;
+  --line:      #1e2a3a;
+  --dim:       #2a3a50;
+  --muted:     #506070;
+  --body:      #8fa3b8;
+  --text:      #c9d4df;
+  --bright:    #e8eef4;
+  --steel:     #3a6fa8;   /* deep steel blue – primary accent */
+  --teal:      #1a5f5a;   /* muted teal – secondary */
+  --teal-lit:  #2a9d8f;
+  --amber:     #7a5c2a;   /* dim amber */
+  --amber-lit: #c8922a;
+  --red:       #6b2a2a;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+}
+
+/* ─── RESET ─────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--body);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.75;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+
+/* ─── GRID PAPER BG ─────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(58,111,168,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58,111,168,0.04) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* ─── CURSOR GLOW ───────────────────────────────── */
+#cursor-glow{
+  position:fixed;width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(58,111,168,0.07) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+  transform:translate(-50%,-50%);
+  transition:left .12s ease, top .12s ease;
+}
+
+/* ─── LAYOUT ────────────────────────────────────── */
+.wrap{max-width:920px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+section{padding:90px 0}
+
+/* ─── NAV ───────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(7,9,14,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:920px;margin:0 auto;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:52px;
+}
+.nav-sig{
+  font-family:var(--mono);font-size:.78rem;
+  color:var(--steel);letter-spacing:.06em;
+}
+.nav-sig span{color:var(--muted);}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+  transition:color .2s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1px;background:var(--steel);
+  transition:width .25s;
+}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{width:100%;}
+
+/* ─── HERO ──────────────────────────────────────── */
+#hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:52px;
+}
+.hero-layout{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:64px;align-items:center;
+}
+
+/* ── ID CARD (photo placeholder) ── */
+.id-card{
+  width:240px;flex-shrink:0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 0 0 1px var(--dim), 0 24px 60px rgba(0,0,0,0.5);
+}
+.id-card-chrome{
+  background:var(--card);
+  border-bottom:1px solid var(--line);
+  padding:9px 14px;
+  display:flex;align-items:center;gap:8px;
+}
+.chrome-dot{
+  width:9px;height:9px;border-radius:50%;
+}
+.chrome-dot.r{background:var(--red);}
+.chrome-dot.a{background:var(--amber);}
+.chrome-dot.g{background:var(--teal);}
+.chrome-label{
+  font-family:var(--mono);font-size:.66rem;
+  color:var(--muted);margin-left:4px;letter-spacing:.08em;
+}
+
+.id-photo-zone{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/4;
+  background:var(--surface);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:12px;overflow:hidden;
+}
+/* scanline effect */
+.id-photo-zone::after{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.18) 3px,
+    rgba(0,0,0,0.18) 4px
+  );
+  pointer-events:none;z-index:2;
+  animation:scanmove 8s linear infinite;
+}
+@keyframes scanmove{
+  0%{background-position:0 0}
+  100%{background-position:0 100px}
+}
+/* moving scan bar */
+.scan-bar{
+  position:absolute;
+  left:0;right:0;height:3px;
+  background:linear-gradient(90deg, transparent, var(--teal-lit), transparent);
+  opacity:.5;z-index:3;
+  animation:scanbar 4s ease-in-out infinite;
+}
+@keyframes scanbar{
+  0%{top:-3px;opacity:0}
+  10%{opacity:.5}
+  90%{opacity:.5}
+  100%{top:100%;opacity:0}
+}
+
+.photo-placeholder{
+  position:relative;z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.photo-placeholder-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--panel);
+  border:1px dashed var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;
+}
+.photo-placeholder-text{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);text-align:center;line-height:1.6;
+}
+/* corner brackets */
+.id-photo-zone::before{
+  content:'';
+  position:absolute;
+  inset:12px;
+  border:1px solid rgba(58,111,168,.2);
+  border-radius:2px;
+  z-index:4;pointer-events:none;
+}
+
+/* ── COMMENT: To add your real photo ──
+   Delete the entire .photo-placeholder div
+   and add this inside .id-photo-zone instead:
+   <img src="your-photo.jpg" alt="Tushar"
+        style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:1;">
+-->
+
+.id-meta{
+  padding:14px;
+  border-top:1px solid var(--line);
+}
+.id-meta-line{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);line-height:2;
+}
+.id-meta-val{color:var(--teal-lit);}
+.id-status{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:10px;
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--teal-lit);
+}
+.id-status::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--teal-lit);
+  animation:blink 1.4s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ── HERO TEXT ── */
+.hero-text{}
+.hero-prompt{
+  font-family:var(--mono);font-size:.75rem;
+  color:var(--muted);margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.hero-prompt::before{content:'>';color:var(--steel);}
+h1{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:clamp(2.2rem,5vw,3.4rem);
+  line-height:1.08;
+  letter-spacing:-.025em;
+  color:var(--bright);
+  margin-bottom:6px;
+}
+.name-sub{
+  display:block;
+  font-weight:300;
+  font-size:clamp(1.4rem,3vw,2rem);
+  color:var(--steel);
+  letter-spacing:.01em;
+}
+.hero-tagline{
+  margin:20px 0 32px;
+  font-size:.92rem;
+  color:var(--body);
+  max-width:400px;
+  line-height:1.7;
+}
+.typewriter-wrap{
+  font-family:var(--mono);font-size:.82rem;
+  color:var(--teal-lit);
+  border-left:2px solid var(--steel);
+  padding-left:14px;
+  margin-bottom:36px;
+  min-height:24px;
+}
+.cursor{
+  display:inline-block;width:8px;height:1em;
+  background:var(--steel);margin-left:2px;
+  vertical-align:text-bottom;
+  animation:blink 1s step-end infinite;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;border-radius:3px;
+  font-family:var(--mono);font-size:.75rem;
+  letter-spacing:.06em;font-weight:500;
+  cursor:pointer;transition:all .2s;border:none;
+}
+.btn-fill{
+  background:var(--steel);color:var(--bright);
+}
+.btn-fill:hover{background:#4a82bc;transform:translateY(-1px);}
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--body);
+}
+.btn-outline:hover{border-color:var(--steel);color:var(--text);}
+
+/* ─── SECTION CHROME ─────────────────────────────── */
+.sec-top{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:48px;
+}
+.sec-label{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--steel);letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;
+}
+.sec-rule{
+  flex:1;height:1px;
+  background:linear-gradient(90deg, var(--line), transparent);
+}
+h2{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(1.4rem,3vw,1.9rem);
+  color:var(--text);line-height:1.15;
+  letter-spacing:-.015em;
+  margin-bottom:32px;
+}
+
+/* ─── REVEAL ANIMATION ───────────────────────────── */
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ─── ABOUT GRID ─────────────────────────────────── */
+.meta-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:56px;
+}
+.meta-cell{
+  background:var(--panel);
+  padding:20px 22px;
+  transition:background .2s;
+}
+.meta-cell:hover{background:var(--card);}
+.meta-key{
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--muted);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.meta-val{font-size:.9rem;color:var(--text);font-weight:500;}
+
+/* ─── SKILLS ─────────────────────────────────────── */
+.skills-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.skill-row{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:16px 20px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:14px;align-items:start;
+  transition:border-color .2s, transform .2s;
+}
+.skill-row:hover{border-color:var(--steel);transform:translateX(4px);}
+.skill-glyph{
+  font-family:var(--mono);font-size:.8rem;
+  color:var(--steel);padding-top:2px;
+}
+.skill-name{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+.skill-sub{font-size:.75rem;color:var(--muted);}
+
+/* ─── TIMELINE ───────────────────────────────────── */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-row{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:0 24px;
+}
+.tl-year{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--muted);text-align:right;
+  padding-top:3px;line-height:1.5;
+}
+.tl-body{
+  border-left:1px solid var(--line);
+  padding:0 0 40px 28px;
+  position:relative;
+}
+.tl-row:last-child .tl-body{padding-bottom:0;}
+.tl-dot{
+  position:absolute;left:-5px;top:4px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--panel);
+  border:1px solid var(--steel);
+}
+.tl-title{
+  font-weight:600;font-size:.95rem;
+  color:var(--text);margin-bottom:3px;
+}
+.tl-where{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--teal-lit);margin-bottom:8px;
+}
+.tl-note{font-size:.82rem;color:var(--muted);}
+.tl-chip{
+  display:inline-block;
+  background:rgba(200,146,42,.08);
+  border:1px solid rgba(200,146,42,.2);
+  border-radius:2px;
+  padding:2px 9px;
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--amber-lit);margin-top:8px;
+}
+
+/* ─── EXP CARDS ──────────────────────────────────── */
+.exp-list{display:flex;flex-direction:column;gap:10px;}
+.exp-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:20px 24px;
+  display:grid;
+  grid-template-columns:3px 1fr;
+  gap:0 20px;
+  transition:border-color .2s;
+  position:relative;overflow:hidden;
+}
+.exp-card::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--line);
+  transition:background .2s;
+}
+.exp-card:hover{border-color:var(--dim);}
+.exp-card:hover::before{background:var(--steel);}
+.exp-inner{}
+.exp-role{font-weight:600;font-size:.92rem;color:var(--text);margin-bottom:3px;}
+.exp-org{font-family:var(--mono);font-size:.7rem;color:var(--teal-lit);margin-bottom:8px;}
+.exp-desc{font-size:.82rem;color:var(--muted);line-height:1.65;}
+.exp-when{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-top:8px;}
+
+/* ─── RESEARCH ───────────────────────────────────── */
+.research-list{display:flex;flex-direction:column;gap:16px;}
+.r-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:26px 28px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .25s;
+}
+.r-card:hover{border-color:var(--steel);}
+.r-card-glow{
+  position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle, rgba(58,111,168,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.r-type{
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--muted);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.r-title{
+  font-weight:600;font-size:1rem;
+  color:var(--text);margin-bottom:10px;
+}
+.r-desc{font-size:.84rem;color:var(--muted);line-height:1.72;}
+.r-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;}
+.r-tag{
+  background:rgba(58,111,168,.08);
+  border:1px solid rgba(58,111,168,.18);
+  border-radius:2px;
+  padding:3px 10px;
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--steel);
+}
+.r-certs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.r-cert{
+  background:rgba(42,157,143,.07);
+  border:1px solid rgba(42,157,143,.18);
+  border-radius:2px;
+  padding:4px 11px;
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--teal-lit);
+  display:flex;align-items:center;gap:5px;
+}
+.r-cert::before{content:'✓';}
+
+/* ─── PROJECTS ───────────────────────────────────── */
+.proj-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:12px;
+}
+.proj-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:22px 24px;
+  display:flex;flex-direction:column;
+  transition:border-color .2s, transform .2s;
+}
+.proj-card:hover{border-color:var(--steel);transform:translateY(-3px);}
+.proj-id{
+  font-family:var(--mono);font-size:.63rem;
+  color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.proj-id::before{content:'//';color:var(--line);}
+.proj-name{font-weight:600;font-size:.98rem;color:var(--text);margin-bottom:8px;}
+.proj-desc{font-size:.81rem;color:var(--muted);flex:1;line-height:1.65;}
+.proj-foot{
+  margin-top:18px;display:flex;
+  align-items:center;justify-content:space-between;
+}
+.proj-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.proj-chip{
+  background:rgba(90,50,30,.2);
+  border:1px solid var(--amber);
+  border-radius:2px;
+  padding:2px 8px;
+  font-family:var(--mono);font-size:.62rem;
+  color:var(--amber-lit);
+}
+.proj-link{
+  font-family:var(--mono);font-size:.75rem;
+  color:var(--muted);transition:color .2s;
+}
+.proj-link:hover{color:var(--steel);}
+
+.proj-add{
+  background:transparent;
+  border:1px dashed var(--dim);
+  border-radius:3px;
+  padding:22px 24px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:8px;min-height:160px;
+  transition:border-color .2s;cursor:default;
+}
+.proj-add:hover{border-color:var(--muted);}
+.proj-add-icon{font-family:var(--mono);font-size:1.5rem;color:var(--dim);}
+.proj-add-text{font-family:var(--mono);font-size:.65rem;color:var(--dim);text-align:center;}
+
+/* ─── CONNECT ────────────────────────────────────── */
+.connect-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:52px 44px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.connect-box::before{
+  content:'';
+  position:absolute;bottom:-80px;left:50%;
+  transform:translateX(-50%);
+  width:400px;height:200px;
+  background:radial-gradient(ellipse, rgba(58,111,168,.08) 0%, transparent 70%);
+}
+.connect-prompt{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--muted);margin-bottom:16px;
+}
+.connect-prompt span{color:var(--teal-lit);}
+h3{
+  font-family:var(--sans);font-weight:600;
+  font-size:clamp(1.5rem,3vw,2rem);
+  color:var(--bright);margin-bottom:12px;
+}
+.connect-sub{font-size:.88rem;color:var(--muted);margin-bottom:36px;}
+.connect-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.c-link{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:10px 20px;
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--body);
+  transition:all .2s;
+}
+.c-link:hover{border-color:var(--steel);color:var(--text);transform:translateY(-2px);}
+
+/* ─── FOOTER ─────────────────────────────────────── */
+footer{
+  border-top:1px solid var(--line);
+  padding:24px 0;
+}
+.foot-inner{
+  max-width:920px;margin:0 auto;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.foot-left{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
+.foot-left span{color:var(--steel);}
+.foot-right{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+
+/* ─── RESPONSIVE ─────────────────────────────────── */
+@media(max-width:680px){
+  .hero-layout{grid-template-columns:1fr;gap:40px;}
+  .id-card{width:100%;max-width:280px;margin:0 auto;}
+  .tl-row{grid-template-columns:72px 1fr;}
+  .nav-links{gap:18px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor-glow"></div>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-sig"><span>~/</span>mta<span>.dev</span></div>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#education">edu</a>
+      <a href="#experience">work</a>
+      <a href="#research">research</a>
+      <a href="#projects">projects</a>
+      <a href="#connect">contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-layout">
+
+      <!-- ── ID CARD ── -->
+      <div class="id-card reveal">
+        <div class="id-card-chrome">
+          <div class="chrome-dot r"></div>
+          <div class="chrome-dot a"></div>
+          <div class="chrome-dot g"></div>
+          <span class="chrome-label">mta_profile.jpg</span>
+        </div>
+        <div class="id-photo-zone">
+          <div class="scan-bar"></div>
+          <!--
+            ══ HOW TO ADD YOUR PHOTO ══════════════════
+            1. Delete the .photo-placeholder div below
+            2. Paste this inside .id-photo-zone:
+               <img src="your-photo.jpg" alt="Tushar"
+                 style="width:100%;height:100%;
+                        object-fit:cover;
+                        position:absolute;inset:0;z-index:1;">
+            ══════════════════════════════════════════
+          -->
+          <div class="photo-placeholder">
+            <div class="photo-placeholder-icon">📷</div>
+            <div class="photo-placeholder-text">
+              // your photo<br>
+              <span style="color:var(--dim)">see comment in HTML</span>
+            </div>
+          </div>
+        </div>
+        <div class="id-meta">
+          <div class="id-meta-line">ID &nbsp;<span class="id-meta-val">MTA_2025</span></div>
+          <div class="id-meta-line">LOC <span class="id-meta-val">Dhaka, BD</span></div>
+          <div class="id-meta-line">DEP <span class="id-meta-val">CSE / AI-ML</span></div>
+          <div class="id-status">available for research</div>
+        </div>
+      </div>
+
+      <!-- ── TEXT ── -->
+      <div class="hero-text reveal" style="transition-delay:.1s">
+        <div class="hero-prompt">init_portfolio.sh</div>
+        <h1>
+          Mohammad Tushar
+          <span class="name-sub">Abdullah</span>
+        </h1>
+        <p class="hero-tagline">
+          Aspiring AI &amp; ML Engineer — building intelligent systems rooted in the Bangladeshi context. Open to research &amp; collaboration.
+        </p>
+        <div class="typewriter-wrap">
+          <span id="typewriter"></span><span class="cursor"></span>
+        </div>
+        <div class="hero-actions">
+          <a href="#research" class="btn btn-fill">view research →</a>
+          <a href="#connect" class="btn btn-outline">get in touch</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ─────────────────────────────────────── -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-top reveal">
+      <span class="sec-label">about</span>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="meta-grid reveal" style="transition-delay:.05s">
+      <div class="meta-cell">
+        <div class="meta-key">location</div>
+        <div class="meta-val">Dhaka, Bangladesh 🇧🇩</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-key">institution</div>
+        <div class="meta-val">North South University</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-key">focus</div>
+        <div class="meta-val">AI · ML · HCI</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-key">status</div>
+        <div class="meta-val">Seeking research opps.</div>
+      </div>
+    </div>
+
+    <!-- skills -->
+    <div class="sec-top reveal">
+      <span class="sec-label">skills</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="skills-list reveal" style="transition-delay:.08s">
+      <div class="skill-row">
+        <span class="skill-glyph">[01]</span>
+        <div>
+          <div class="skill-name">Communication</div>
+          <div class="skill-sub">English speaking &amp; writing — tutoring, peer support, academic instruction</div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-glyph">[02]</span>
+        <div>
+          <div class="skill-name">Leadership &amp; Event Management</div>
+          <div class="skill-sub">Team admin, sponsorship &amp; outreach, large-scale event coordination</div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-glyph">[03]</span>
+        <div>
+          <div class="skill-name">Graphic Design</div>
+          <div class="skill-sub">Intermediate to semi-professional · Canva, Figma</div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-glyph">[04]</span>
+        <div>
+          <div class="skill-name">Photo Editing</div>
+          <div class="skill-sub">Intermediate to professional · Adobe Lightroom, Photoshop</div>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-glyph">[05]</span>
+        <div>
+          <div class="skill-name">Research</div>
+          <div class="skill-sub">Field data collection, data sorting, research ethics (3 certifications), HCI &amp; AI/ML</div>
+        </div>
+      </div>
+      <!-- ADD SKILL: copy a .skill-row block above and paste here -->
+    </div>
+  </div>
+</section>
+
+<!-- ── EDUCATION ──────────────────────────────────── -->
+<section id="education">
+  <div class="wrap">
+    <div class="sec-top reveal">
+      <span class="sec-label">education</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-row reveal">
+        <div class="tl-year">2022 –<br>2027 exp.</div>
+        <div class="tl-body">
+          <div class="tl-dot"></div>
+          <div class="tl-title">B.Sc. Computer Science &amp; Engineering</div>
+          <div class="tl-where">North South University · Dhaka</div>
+          <div class="tl-note">Expected graduation end of 2027.</div>
+          <!-- Add transcripts or certifications here -->
+        </div>
+      </div>
+
+      <div class="tl-row reveal" style="transition-delay:.06s">
+        <div class="tl-year">HSC</div>
+        <div class="tl-body">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Higher Secondary Certificate</div>
+          <div class="tl-where">Dhaka City College · Science Group</div>
+          <span class="tl-chip">GPA 5.00</span>
+          <!-- Add certificates here -->
+        </div>
+      </div>
+
+      <div class="tl-row reveal" style="transition-delay:.1s">
+        <div class="tl-year">SSC</div>
+        <div class="tl-body">
+          <div class="tl-dot"></div>
+          <div class="tl-title">Secondary School Certificate</div>
+          <div class="tl-where">National Ideal School, Banasree · Science Group</div>
+          <span class="tl-chip">GPA 5.00</span>
+          <!-- Add certificates here -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ─────────────────────────────────── -->
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-top reveal">
+      <span class="sec-label">experience</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div></div>
+        <div class="exp-inner">
+          <div class="exp-role">Undergraduate Teaching Assistant</div>
+          <div class="exp-org">North South University</div>
+          <div class="exp-desc">Supporting faculty in academic instruction, facilitating student understanding, and assisting in course delivery at the undergraduate level.</div>
+          <div class="exp-when">Ongoing</div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:.04s">
+        <div></div>
+        <div class="exp-inner">
+          <div class="exp-role">Peer Tutor — English Speaking &amp; Writing</div>
+          <div class="exp-org">NAHF Academy</div>
+          <div class="exp-desc">Guiding peers in developing English communication and academic writing skills in a structured peer-learning environment.</div>
+          <div class="exp-when">Ongoing</div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:.08s">
+        <div></div>
+        <div class="exp-inner">
+          <div class="exp-role">Sub-Executive — Team Admin · Sponsorship &amp; Outreach · Event Management</div>
+          <div class="exp-org">NSU Computer and Engineering Club</div>
+          <div class="exp-desc">Handling administrative operations, securing sponsorships, managing outreach campaigns, and coordinating large-scale tech events for one of the university's most active clubs.</div>
+          <div class="exp-when">Ongoing</div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:.12s">
+        <div></div>
+        <div class="exp-inner">
+          <div class="exp-role">Private Tutor</div>
+          <div class="exp-org">Independent</div>
+          <div class="exp-desc">Providing personalised academic tutoring across multiple levels — primarily SSC and HSC — focusing on foundational concept-building and exam readiness since 2021.</div>
+          <div class="exp-when">2021 — Present</div>
+        </div>
+      </div>
+
+      <!-- ADD EXPERIENCE: copy an .exp-card block above and paste here -->
+
+    </div>
+  </div>
+</section>
+
+<!-- ── RESEARCH ───────────────────────────────────── -->
+<section id="research">
+  <div class="wrap">
+    <div class="sec-top reveal">
+      <span class="sec-label">research</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="research-list">
+
+      <div class="r-card reveal">
+        <div class="r-card-glow"></div>
+        <div class="r-type">HCI · Co-Learning · Field Research</div>
+        <div class="r-title">Junior Research Assistant — DIAL Lab, NSU</div>
+        <div class="r-desc">
+          Worked at the Digital Innovation &amp; Applied Learning (DIAL) Lab at North South University under the supervision of <strong style="color:var(--text)">Dr. Nova Ahmed, PhD</strong>, contributing to a co-learning project rooted in Human-Computer Interaction. Responsibilities included on-field data collection and structured data sorting to support ongoing research publications.
+        </div>
+        <div class="r-certs">
+          <span class="r-cert">Research Ethics I</span>
+          <span class="r-cert">Research Ethics II</span>
+          <span class="r-cert">Research Ethics III</span>
+        </div>
+        <div class="r-tags">
+          <span class="r-tag">HCI</span>
+          <span class="r-tag">Co-learning</span>
+          <span class="r-tag">Data Collection</span>
+          <span class="r-tag">DIAL Lab</span>
+        </div>
+        <!-- Add documentation/paper links here -->
+      </div>
+
+      <div class="r-card reveal" style="transition-delay:.06s">
+        <div class="r-card-glow"></div>
+        <div class="r-type">AI · Machine Learning · EdTech</div>
+        <div class="r-title">Research Contributor — AI-Powered Personalised Learning Assistant</div>
+        <div class="r-desc">
+          Currently contributing to a research project under <strong style="color:var(--text)">Dr. Sumaiya Tabassum Nimi (STI)</strong>, Assistant Professor at NSU. The project focuses on developing an AI and ML-based personalised learning assistant tailored specifically for Bangladeshi students — addressing the gap left by Western-centric AI educational tools.
+        </div>
+        <div class="r-tags">
+          <span class="r-tag">AI / ML</span>
+          <span class="r-tag">Personalised Learning</span>
+          <span class="r-tag">EdTech</span>
+          <span class="r-tag">Bangladesh</span>
+        </div>
+        <!-- Add documentation here -->
+      </div>
+
+      <div class="r-card reveal" style="transition-delay:.1s">
+        <div class="r-card-glow"></div>
+        <div class="r-type">Independent Research · Open Initiative</div>
+        <div class="r-title">Localised AI Learning System — Personal Project</div>
+        <div class="r-desc">
+          Independently exploring the development of a Bangladeshi-context AI-powered learning system. Current AI educational tools are predominantly built on Western curricula, leaving a significant localisation gap. This initiative aims to integrate NCTB (National Curriculum and Textbook Board) content into an adaptive learning model — identifying structural challenges in the local education system and engineering AI-driven solutions to address them.
+        </div>
+        <div class="r-tags">
+          <span class="r-tag">NCTB Curriculum</span>
+          <span class="r-tag">LLM / AI</span>
+          <span class="r-tag">Education Equity</span>
+          <span class="r-tag">Open Research</span>
+        </div>
+        <!-- Add documentation, links, or notes here -->
+      </div>
+
+      <!-- ADD RESEARCH: copy an .r-card block above and paste here -->
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ───────────────────────────────────── -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-top reveal">
+      <span class="sec-label">projects</span>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="proj-grid">
+
+      <!--
+        ══ ADD A PROJECT ══════════════════════════════
+        Copy this block and fill in your details:
+
+        <div class="proj-card">
+          <div class="proj-id">project_name.py</div>
+          <div class="proj-name">Your Project Name</div>
+          <div class="proj-desc">One or two lines about what it does and why it matters.</div>
+          <div class="proj-foot">
+            <div class="proj-chips">
+              <span class="proj-chip">Python</span>
+              <span class="proj-chip">React</span>
+            </div>
+            <a href="https://github.com/yourusername/repo" class="proj-link" target="_blank">↗</a>
+          </div>
+        </div>
+        ═══════════════════════════════════════════════
+      -->
+
+      <div class="proj-add">
+        <div class="proj-add-icon">[ + ]</div>
+        <div class="proj-add-text">// add your first project<br>see HTML comment above</div>
+      </div>
+
+      <div class="proj-add">
+        <div class="proj-add-icon">[ + ]</div>
+        <div class="proj-add-text">// add another project</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CONNECT ────────────────────────────────────── -->
+<section id="connect">
+  <div class="wrap">
+    <div class="connect-box reveal">
+      <div class="connect-prompt">
+        <span>$ </span>echo "let's collaborate"
+      </div>
+      <h3>Open to research &amp; conversation</h3>
+      <p class="connect-sub">AI, education, HCI, or just a good idea — reach out.</p>
+      <div class="connect-links">
+        <!-- Replace # with your actual links -->
+        <a href="mailto:youremail@example.com" class="c-link">✉ email</a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank" class="c-link">⬡ linkedin</a>
+        <a href="https://github.com/yourusername" target="_blank" class="c-link">⌥ github</a>
+        <!-- Add more: copy a .c-link above -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-left">
+      <span>~/</span>mta · Dhaka, Bangladesh
+    </div>
+    <div class="foot-right">© 2025</div>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ────────────────────────────────────── -->
+<script>
+/* cursor glow */
+const glow = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+});
+
+/* scroll reveal */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => io.observe(el));
+
+/* typewriter */
+const lines = [
+  'currently: BSc CSE @ North South University',
+  'interest: AI · ML · HCI · Education',
+  'seeking: research collaborations',
+  'building: localised AI learning system',
+];
+let li = 0, ci = 0, deleting = false;
+const tw = document.getElementById('typewriter');
+function type(){
+  const line = lines[li];
+  if(!deleting){
+    tw.textContent = line.slice(0, ++ci);
+    if(ci === line.length){ deleting = true; setTimeout(type, 2200); return; }
+    setTimeout(type, 42);
+  } else {
+    tw.textContent = line.slice(0, --ci);
+    if(ci === 0){ deleting = false; li = (li+1) % lines.length; setTimeout(type, 400); return; }
+    setTimeout(type, 22);
+  }
+}
+type();
+</script>
+</body>
+</html>
